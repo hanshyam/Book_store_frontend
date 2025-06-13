@@ -15,7 +15,7 @@ const Header = () => {
     if (searchInput.trim()) {
       getSearchSuggestions();
       const filtered = searchSuggestion.filter((item) =>
-        item.toLowerCase().includes(searchInput.toLowerCase())
+        item.text.toLowerCase().includes(searchInput.toLowerCase())
       );
       setFilteredSuggestions(filtered);
       setShowDropdown(true);
@@ -70,10 +70,10 @@ const Header = () => {
                 {filteredSuggestions.map((item, index) => (
                   <li
                     key={index}
-                    onClick={() => handleSuggestionClick(item)}
+                    onClick={() => handleSuggestionClick(item.text)}
                     className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
                   >
-                    {item}
+                    {item.text}
                   </li>
                 ))}
               </ul>
