@@ -10,6 +10,7 @@ axios.defaults.baseURL = baseUrl;
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("bookToken"));
+  const [searchSuggestion,setSearchSuggestion] = useState([]);
 
   // Automatically set token in axios headers
   useEffect(() => {
@@ -77,6 +78,21 @@ export const AuthContextProvider = ({ children }) => {
   }
 };
 
+// get search suggestion
+const getSearchSuggestions = async () =>{
+  try {
+     const { data } = await axios.get('/api/search/');
+    if(data.success){
+      setSearchSuggestion(data.searchSuggessionData);
+    }else{
+      setSearchSuggestion([]);
+    }
+  }
+  catch(error){
+    toast.error(error.message);
+  }
+}
+
 
 useEffect(() => {
   const localToken = localStorage.getItem("bookToken");
@@ -96,7 +112,8 @@ useEffect(() => {
     login,
     register,
     logout,
-    
+    searchSuggestion,
+    getSearchSuggestions
   };
 
 
