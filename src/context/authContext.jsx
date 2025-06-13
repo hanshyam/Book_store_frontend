@@ -4,7 +4,7 @@ import { createContext, useState, useEffect } from 'react';
 
 export const AuthContext = createContext();
 
-const baseUrl = 'http://localhost:3000/api';
+const baseUrl = 'https://book-store-backend-m6sa.onrender.com/api';
 axios.defaults.baseURL = baseUrl;
 
 export const AuthContextProvider = ({ children }) => {
