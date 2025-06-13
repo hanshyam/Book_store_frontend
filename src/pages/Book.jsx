@@ -18,6 +18,7 @@ const Book = () => {
     addRating,
     addReview,
     reviews,
+    setReviews
     getReview,
   } = useContext(BookContext);
 
@@ -73,6 +74,7 @@ const Book = () => {
     const fetchReviews = async () => {
       if (selectedBook?._id) {
         setLoading(true);
+        setReviews([]);
         await getReview(selectedBook._id);
         setLoading(false);
       }
