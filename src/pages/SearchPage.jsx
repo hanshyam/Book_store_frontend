@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import bookCover from "../assets/images.jpg";
 import { BookContext } from "../context/bookContext.jsx";
@@ -19,6 +19,30 @@ const SearchPage = () => {
   const [selectedGenre, setSelectedGenre] = useState("All Genres");
   const [selectedAuthor, setSelectedAuthor] = useState("All Authors");
   const [selectedRating, setSelectedRating] = useState("All Ratings");
+
+  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  useEffect(() => {
+    if (searchInput.trim()) {
+      const filtered = searchSuggestion.filter(
+        (item) =>
+          typeof item.text === "string" &&
+          item.text.toLowerCase().includes(searchInput.toLowerCase())
+      );
+      setFilteredSuggestions(filtered);
+      setShowDropdown(true);
+    } else {
+      setFilteredSuggestions([]);
+      setShowDropdown(false);
+    }
+  }, [searchInput, searchSuggestion]);
+
+  const handleSuggestionClick = (text) => {
+    setSearchInput(text);
+    setShowDropdown(false);
+    navigate(`/search/book`);
+  };
 
   const handleBookClick = (bookId) => {
     navigate(`/book/${bookId}`);
@@ -49,50 +73,36 @@ const SearchPage = () => {
 
   return (
     <div className="w-full pt-5 font-sans">
-      {/* Search Bar */}
-      <div className="flex items-center bg-gray-100 rounded-full px-3 py-2 w-full max-w-md mx-auto">
-        <span className="text-gray-500 mr-2">🔍</span>
+      {/* Search Input + Dropdown */}
+      <div className="relative max-w-md mx-auto">
         <input
           type="text"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          className="bg-transparent flex-1 text-sm focus:outline-none"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              setShowDropdown(false);
+              navigate(`/search/book`);
+            }
+          }}
+          className="w-full px-4 py-2 border border-gray-300 rounded-full text-sm focus:outline-none"
           placeholder="Search books by title, author..."
         />
-        {searchInput && (
-          <span
-            className="text-gray-500 cursor-pointer"
-            onClick={() => setSearchInput("")}
-          >
-            ❌
-          </span>
+        {/* Suggestion dropdown (same style as Header) */}
+        {showDropdown && filteredSuggestions.length > 0 && (
+          <ul className="absolute z-20 bg-white border border-gray-300 mt-1 rounded shadow w-full max-h-40 overflow-y-auto text-sm">
+            {filteredSuggestions.map((item, index) => (
+              <li
+                key={index}
+                onClick={() => handleSuggestionClick(item.text)}
+                className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
+              >
+                {item.text}
+              </li>
+            ))}
+          </ul>
         )}
       </div>
-
-      {/* Suggestions below search bar */}
-      {searchInput && searchSuggestion?.length > 0 && (
-        <div className="text-sm mt-2 text-gray-600 text-center">
-          Suggestions:
-          <div className="flex flex-wrap justify-center gap-2 mt-1">
-            {searchSuggestion
-              .filter(
-                (item) =>
-                  typeof item.text === "string" &&
-                  item.text.toLowerCase().includes(searchInput.toLowerCase())
-              )
-              .slice(0, 6)
-              .map((item, idx) => (
-                <span
-                  key={idx}
-                  className="px-3 py-1 border rounded-full bg-gray-200 cursor-pointer hover:bg-gray-300 transition text-xs"
-                  onClick={() => setSearchInput(item.text)}
-                >
-                  {item.text}
-                </span>
-              ))}
-          </div>
-        </div>
-      )}
 
       {/* Filters */}
       <div className="flex gap-5 p-3 mb-3 justify-center flex-wrap mt-5">
