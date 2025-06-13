@@ -18,7 +18,7 @@ const Book = () => {
     addRating,
     addReview,
     reviews,
-    setReviews
+    setReviews,
     getReview,
   } = useContext(BookContext);
 
