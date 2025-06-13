@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/authContext";
-import { BookContext } from "../context/bookContext";
+import { BookContext } from "../context/bookContext.jsx";
+import coverImage from '../assets/images.jpg'
 
 const BookstoreAdmin = () => {
   const { user } = useContext(AuthContext);
@@ -75,11 +76,11 @@ const BookstoreAdmin = () => {
   };
 
   // Filter books based on search term
-  const filteredBooks = books.filter((book) =>
-    `${book.title} ${book.author} ${book.genre}`
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase())
-  );
+  const filteredBooks = books.filter((book) => {
+    const combined = `${book.title || ""} ${book.author || ""} ${book.genre || ""}`;
+    return combined.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
 
   return (
     <div className="flex min-h-screen font-sans">
@@ -113,33 +114,33 @@ const BookstoreAdmin = () => {
         <div className="overflow-x-auto">
           <table className="w-full border border-gray-200 rounded">
             <thead>
-              <tr className="bg-gray-50 text-sm text-gray-600">
-                <th className="p-3 text-left">Cover</th>
-                <th className="p-3 text-left">Title</th>
-                <th className="p-3 text-left">Author</th>
-                <th className="p-3 text-left">Genre</th>
-                <th className="p-3 text-left">Price</th>
-                <th className="p-3 text-left">Actions</th>
+              <tr className="bg-gray-50 text-sm text-gray-600 col-12">
+                <th className="p-3 text-left col-3">Cover</th>
+                <th className="p-3 text-left col-3">Title</th>
+                <th className="p-3 text-left col-2">Author</th>
+                <th className="p-3 text-left col-2">Genre</th>
+                <th className="p-3 text-left col-1">Price</th>
+                <th className="p-3 text-left col-1">Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredBooks.map((book, index) => (
                 <tr
                   key={index}
-                  className="border-t border-gray-200 text-sm hover:bg-gray-50"
+                  className="border-t border-gray-200 text-sm hover:bg-gray-50  col-12"
                 >
-                  <td className="p-3">
+                  <td className="p-3 col-3">
                     <img
-                      src={book.coverImage || "https://via.placeholder.com/50"}
+                      src={book.coverImage || coverImage}
                       alt={book.title}
                       className="w-12 h-16 object-cover rounded"
                     />
                   </td>
-                  <td className="p-3">{book.title}</td>
-                  <td className="p-3">{book.author}</td>
-                  <td className="p-3">{book.genre}</td>
-                  <td className="p-3">₹{book.price}</td>
-                  <td className="p-3 flex gap-2">
+                  <td className="p-3 col-3">{book.title}</td>
+                  <td className="p-3 col-2">{book.author}</td>
+                  <td className="p-3 col-2">{book.genre}</td>
+                  <td className="p-3 col-1">₹{book.price}</td>
+                  <td className="p-3 flex gap-2 col-1 items-center m-auto">
                     <button
                       onClick={() => handleEditBook(index)}
                       className="text-blue-500 hover:underline"
@@ -179,7 +180,7 @@ const BookstoreAdmin = () => {
                 <label htmlFor="cover-upload">
                   <img
                     src={
-                      newBook.coverImage || "https://via.placeholder.com/100"
+                      newBook.coverImage || coverImage
                     }
                     alt="Cover Preview"
                     className="w-24 h-24 object-cover rounded-full border-2 border-gray-300 cursor-pointer hover:opacity-80"
