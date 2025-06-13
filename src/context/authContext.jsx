@@ -81,7 +81,7 @@ export const AuthContextProvider = ({ children }) => {
 // get search suggestion
 const getSearchSuggestions = async () =>{
   try {
-     const { data } = await axios.get('/api/search/');
+     const { data } = await axios.get('/search/');
     if(data.success){
       setSearchSuggestion(data.searchSuggessionData);
     }else{
