@@ -12,10 +12,15 @@ const Header = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    getSearchSuggestions(); // Only once on mount
+  }, []);
+
+  useEffect(() => {
     if (searchInput.trim()) {
-      getSearchSuggestions();
-      const filtered = searchSuggestion.filter((item) =>
-        item.text.toLowerCase().includes(searchInput.toLowerCase())
+      const filtered = searchSuggestion.filter(
+        (item) =>
+          typeof item.text === "string" &&
+          item.text.toLowerCase().includes(searchInput.toLowerCase())
       );
       setFilteredSuggestions(filtered);
       setShowDropdown(true);
@@ -23,7 +28,7 @@ const Header = () => {
       setFilteredSuggestions([]);
       setShowDropdown(false);
     }
-  }, [searchInput, getSearchSuggestions, searchSuggestion]);
+  }, [searchInput, searchSuggestion]);
 
   const handleSuggestionClick = (suggestion) => {
     setSearchInput(suggestion);

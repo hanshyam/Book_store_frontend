@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import bookCover from "../assets/images.jpg";
 import { BookContext } from "../context/bookContext.jsx";
+import { AuthContext } from "../context/authContext";
 
 const SearchPage = () => {
   const navigate = useNavigate();
@@ -12,6 +13,8 @@ const SearchPage = () => {
     authors,
     genres,
   } = useContext(BookContext);
+
+  const { searchSuggestion } = useContext(AuthContext);
 
   const [selectedGenre, setSelectedGenre] = useState("All Genres");
   const [selectedAuthor, setSelectedAuthor] = useState("All Authors");
@@ -65,6 +68,31 @@ const SearchPage = () => {
           </span>
         )}
       </div>
+
+      {/* Suggestions below search bar */}
+      {searchInput && searchSuggestion?.length > 0 && (
+        <div className="text-sm mt-2 text-gray-600 text-center">
+          Suggestions:
+          <div className="flex flex-wrap justify-center gap-2 mt-1">
+            {searchSuggestion
+              .filter(
+                (item) =>
+                  typeof item.text === "string" &&
+                  item.text.toLowerCase().includes(searchInput.toLowerCase())
+              )
+              .slice(0, 6)
+              .map((item, idx) => (
+                <span
+                  key={idx}
+                  className="px-3 py-1 border rounded-full bg-gray-200 cursor-pointer hover:bg-gray-300 transition text-xs"
+                  onClick={() => setSearchInput(item.text)}
+                >
+                  {item.text}
+                </span>
+              ))}
+          </div>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="flex gap-5 p-3 mb-3 justify-center flex-wrap mt-5">
