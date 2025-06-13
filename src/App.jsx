@@ -1,8 +1,8 @@
 import "./App.css";
 import { Toaster } from 'react-hot-toast';
 import Home from "./pages/Home.jsx";
-import SearchPage from "./pages/SearchPage.jsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import SearchPage from "./pages/SearchPage.jsx";
 import Layout from "./components/Layout.jsx";
 import Book from "./pages/Book.jsx";
 import BookstoreAdmin from "./pages/BookStoreAdmin.jsx";
